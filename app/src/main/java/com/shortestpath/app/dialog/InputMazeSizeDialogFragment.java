@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -15,7 +16,6 @@ import com.shortestpath.R;
 
 public class InputMazeSizeDialogFragment extends DialogFragment {
 
-    private static Context context;
 
     // Widgets
     private View inputDialogFragment;
@@ -35,8 +35,7 @@ public class InputMazeSizeDialogFragment extends DialogFragment {
     }
 
     /** Constructor */
-    public static InputMazeSizeDialogFragment newInstance(Context context) {
-        InputMazeSizeDialogFragment.context = context;
+    public static InputMazeSizeDialogFragment newInstance() {
         return new InputMazeSizeDialogFragment();
     }
 
@@ -95,6 +94,7 @@ public class InputMazeSizeDialogFragment extends DialogFragment {
                 rowSize = Integer.parseInt(rowString);
                 columnSize = Integer.parseInt(columnString);
             } catch (NumberFormatException e) {
+                Log.e("InputMazeDialogFragment", e.toString());
             }
 
             onMazeSizeEnteredListener.onMazeSizeEntered(rowSize, columnSize);

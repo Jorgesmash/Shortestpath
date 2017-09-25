@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -253,11 +251,17 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
     private void showInputMazeSizeDialogFragment() {
 
-        InputMazeSizeDialogFragment inputMazeSizeDialogFragment = InputMazeSizeDialogFragment.newInstance(this);
+        InputMazeSizeDialogFragment inputMazeSizeDialogFragment = InputMazeSizeDialogFragment.newInstance();
         inputMazeSizeDialogFragment.setOnMazeSizeEnteredListener(new InputDialogFragmentOnMazeSizeEnteredListener());
         inputMazeSizeDialogFragment.show(getFragmentManager(), null);
     }
 
+    /**
+     * Called after user entered the number of rows and columns for the maze in the dialog fragment.
+     *
+     * If rowSize < 1, it will be adjusted to 1. If rowSize > 10, it will be adjusted to 10
+     * If columnSize < 5, it will be adjusted to 5. if columnSize > 100, it will be adjusted to 100
+     * */
     private class InputDialogFragmentOnMazeSizeEnteredListener implements InputMazeSizeDialogFragment.OnMazeSizeEnteredListener {
 
         @Override
@@ -265,47 +269,63 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
             if (rowSize > 0 && columnSize > 0) {
 
+                // Adjust for rowSize
                 if (rowSize < 1) {
                     rowSize = 1;
                 } else if (rowSize > 10) {
                     rowSize = 10;
                 }
 
+                // Adjust for columnSize
                 if (columnSize < 5) {
                     columnSize = 5;
                 } else if (columnSize > 100) {
                     columnSize = 100;
                 }
 
-                MainFragmentActivity.this.rowSize = rowSize;
-                MainFragmentActivity.this.columnSize = columnSize;
-
+                // Update the current status of the widgets
                 mazeEditText.setEnabled(true);
                 mazeEditText.setFocusableInTouchMode(true);
                 mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
                 MainFragmentActivity.this.showCustomKeyboard(mazeEditText);
-
                 hintTextView.setText(getString(R.string.insert_number_for_position_label));
-
                 positionTextView.setVisibility(View.VISIBLE);
-
                 addFloatingButton.setEnabled(false);
                 startFloatingButton.setVisibility(View.VISIBLE);
                 startFloatingButton.setEnabled(false);
-
                 mazeSizeLabelTextView.setVisibility(View.VISIBLE);
-
                 mazeSizeTextView.setText(rowSize + "x" + columnSize);
                 mazeSizeTextView.setVisibility(View.VISIBLE);
 
-                initializeMaze(rowSize, columnSize);
+                // Keep the size of the rows and columns in class variable level
+                MainFragmentActivity.this.rowSize = rowSize;
+                MainFragmentActivity.this.columnSize = columnSize;
+
+                // Initialize the maze bi-dimensional array
+                maze = new int[rowSize][columnSize];
             }
         }
     }
 
+    /**
+     * Called every time the representing trama of the maze entered by the user changes.
+     *
+     * Each time the trama changes, it looks for commas (',') and negative signs ('-') in order to determine
+     * if the trama sould continue adding numbers in the same row or should it do it in the next one.
+     *
+     * When a coma is typed, the last entered number before the comma is appended in the maze
+     * bi-dimensional array.
+     *
+     * When a minus sign is typed, the number to be typed after the sign will be negative.
+     *
+     * Once the total number of rows is reached, the maze is ready to calculate its shortest path.
+     * */
     private class MazeEditTextTextWatcher implements TextWatcher {
 
-        // Control variables
+        // Negative sign control variable
+        boolean negative = false;
+
+        // Rows and Columns Control variables
         int lastCommaIndex = -1;
         int commasCount = 0;
         int lastEnterIndex = -1;
@@ -317,93 +337,156 @@ public class MainFragmentActivity extends BaseFragmentActivity {
             String numberSequenceString = charSequence.toString();
 
             String lastCharacterString = numberSequenceString.substring(numberSequenceString.length() - 1);
-            if (lastCharacterString.equals(",")) {
+            if (lastCharacterString.equals("-")) { // If the typed character is a minus sign and it was not already typed
+
+                // The number currently being typed is negative
+                negative = !negative;
+
+                // Remove the minus sign of the last position in the sequence
+                popSubstring(charSequence.length() - 1);
+
+                // Calculate the beginning of the number being currently typed
+                String numberString;
+                numberString = charSequence.toString().substring(charSequence.toString().lastIndexOf("\n") + 1); // Find the beginning of the last row
+                numberString = numberString.substring(numberString.lastIndexOf(" ") + 1); // In the last row, find the last space character
+
+                if (negative) {
+                    // If the negative flag is positive, make the number negative
+                    numberString = "-" + numberString;
+                } else {
+                    // Else, remove the negative sign of the number to make it positive
+                    numberString = numberString.substring(numberString.lastIndexOf(" ") == -1 ? 1 : numberString.lastIndexOf(" ") + 2);
+                }
+
+                // Remove the number and right away add it with its new sign
+                if (mazeEditText.getText().toString().lastIndexOf(" ") > mazeEditText.getText().toString().lastIndexOf("\n")) {
+                    popSubstring(mazeEditText.getText().toString().lastIndexOf(" ") + 1);
+                } else {
+                    popSubstring(mazeEditText.getText().toString().lastIndexOf("\n") + 1);
+                }
+                pushSubstring(numberString);
+
+            } else if (lastCharacterString.equals(",")) { // If the typed character is a comma
+
+                numberSequenceString = charSequence.toString().replace(" ", "");
 
                 commasCount++;
-                if (commasCount < columnSize) {
+                if (commasCount < columnSize) { // Checks if the new number is still part of the current row
 
-                    // Take the last entered number and place it in maze
-                    String compactNumberSequenceString = numberSequenceString.replace(" ", "");
-                    if (compactNumberSequenceString.contains("\n")) {
-                        compactNumberSequenceString = compactNumberSequenceString.substring(lastEnterIndex +1, compactNumberSequenceString.length());
+                    // Take the last entered number and add it in maze
+                    boolean numberAdded = appendsNumberInMaze(numberSequenceString);
+                    if (numberAdded) {
+
+                        // Add a space after the comma in the number sequence
+                        pushSubstring(" ");
+
+                        // Update the current maze insertion position
+                        positionTextView.setText("[" + entersCount + "x" + commasCount + "]");
                     }
-                    String numberString = compactNumberSequenceString.substring(lastCommaIndex + 1, compactNumberSequenceString.length() - 1);
-                    int number;
-                    try {
-                        number = Integer.parseInt(numberString);
-                    } catch (NumberFormatException e) {
-                        int index = numberSequenceString.lastIndexOf(',');
 
-                        if (mazeEditText.length() > 0) {
-                            mazeEditText.removeTextChangedListener(mazeEditTextTextWatcher);
-                            mazeEditText.getText().delete(mazeEditText.length() - 1, mazeEditText.length());
-                            mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
+                } else { // Else, the new number is part of the next row
+
+                    // Take the last entered number and add it in maze
+                    boolean numberAdded = appendsNumberInMaze(numberSequenceString);
+                    if (numberAdded) {
+
+                        // Remove last comma of the number sequence
+                        popSubstring(mazeEditText.length() - 1);
+
+                        entersCount++;
+                        if (entersCount < rowSize) { // Checks if it's still possible to add more rows
+
+                            // Add an enter at the end of the sequence
+                            pushSubstring("\n");
+
+                            // Reset variables for row control
+                            lastCommaIndex = -1;
+                            commasCount = 0;
+
+                            // Increment lastEnterIndex
+                            lastEnterIndex = numberSequenceString.length() - 1;
+
+                        } else { // Else, the maze is ready
+
+                            // Reset variables for both row and column control
+                            lastCommaIndex = -1;
+                            commasCount = 0;
+                            lastEnterIndex = -1;
+                            entersCount = 0;
+
+                            // Update the status of the widgets
+                            hintTextView.setText(getString(R.string.press_start_button));
+                            positionTextView.setVisibility(View.INVISIBLE);
+                            mazeSizeTextView.setVisibility(View.VISIBLE);
+                            mazeEditText.setEnabled(false);
+                            startFloatingButton.setEnabled(true);
                         }
-                        commasCount--;
-                        return;
-                    }
-                    maze[entersCount][commasCount - 1] = number;
-                    lastCommaIndex = compactNumberSequenceString.length() - 1;
-
-                    // Add a space after the comma in the number sequence
-                    mazeEditText.removeTextChangedListener(mazeEditTextTextWatcher);
-                    mazeEditText.append(" ");
-                    mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
-
-                    // Update the current insert of the maze
-                    positionTextView.setText("[" + entersCount + "x" + commasCount + "]");
-
-                } else {
-
-                    // Take the last entered number and place it in maze
-                    String compactNumberSequenceString = numberSequenceString.replace(" ", "");
-                    if (compactNumberSequenceString.contains("\n")) {
-                        compactNumberSequenceString = compactNumberSequenceString.substring(lastEnterIndex + 1, compactNumberSequenceString.length());
-                    }
-                    String numberString = compactNumberSequenceString.substring(lastCommaIndex + 1, compactNumberSequenceString.length() - 1);
-                    int number = Integer.parseInt(numberString);
-                    maze[entersCount][commasCount - 1] = number;
-                    lastCommaIndex = compactNumberSequenceString.length() - 1;
-
-                    // Remove last comma in the number sequence
-                    mazeEditText.removeTextChangedListener(mazeEditTextTextWatcher);
-                    int index = numberSequenceString.lastIndexOf(',');
-                    mazeEditText.getText().delete(index, numberSequenceString.length());
-
-                    entersCount ++;
-                    if (entersCount < rowSize) {
-
-                        // Add an enter at the end of the secuence
-                        mazeEditText.append("\n");
-                        mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
-
-                        // Reset variables
-                        lastCommaIndex = -1;
-                        commasCount = 0;
-
-                        // Increment lastEnterIndex
-                        compactNumberSequenceString = mazeEditText.getText().toString();
-                        compactNumberSequenceString = compactNumberSequenceString.replace(" ", "");
-                        lastEnterIndex = compactNumberSequenceString.length() - 1;
-
-                    } else {
-
-                        mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
-
-                        // Reset All variables
-                        lastCommaIndex = -1;
-                        commasCount = 0;
-                        lastEnterIndex = -1;
-                        entersCount = 0;
-
-                        hintTextView.setText(getString(R.string.press_start_button));
-                        positionTextView.setVisibility(View.INVISIBLE);
-                        mazeSizeTextView.setVisibility(View.VISIBLE);
-                        mazeEditText.setEnabled(false);
-                        startFloatingButton.setEnabled(true);
                     }
                 }
             }
+        }
+
+        /**
+         * Appends the last number of a sequence in the maze.
+         *
+         * The position of the number in the maze will be calculated by the following:
+         * 1. The row index is determined by the count of new line characters ('\n') in the sequence string.
+         * 2. The column index is determined by the count of commas (',') from the last new line to the end of the sequence string.
+         * */
+        private boolean appendsNumberInMaze(String numberSequenceString) {
+
+            String lastRowString = numberSequenceString;
+
+            if (numberSequenceString.contains("\n")) {
+                lastRowString = numberSequenceString.substring(lastEnterIndex + 1, numberSequenceString.length());
+            }
+
+            String numberString = lastRowString.substring(lastCommaIndex + 1, lastRowString.length() - 1);
+            int number;
+            try {
+                number = Integer.parseInt(numberString);
+            } catch (NumberFormatException e) {
+
+                if (mazeEditText.length() > 0) {
+                    popSubstring(mazeEditText.length() - 1);
+                }
+                commasCount--;
+                return false;
+            }
+
+            // Insert the number in the maze bi-dimensional array
+            maze[entersCount][commasCount - 1] = number;
+
+            // Update the index of the last comma
+            lastCommaIndex = lastRowString.length() - 1;
+
+            // Reset negative sign control variable to false
+            negative = false;
+
+            return true;
+        }
+
+        /**
+         * Pushes new characters at the end of the mazeEditText's text
+         * */
+        private void pushSubstring(String string) {
+            mazeEditText.removeTextChangedListener(mazeEditTextTextWatcher);
+            mazeEditText.append(string);
+            mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
+        }
+
+        /**
+         * Removes the last character of the mazeEditText's text
+         * */
+        private String popSubstring(int startIndex) {
+
+            String string = mazeEditText.getText().subSequence(startIndex, mazeEditText.length()).toString();
+
+            mazeEditText.removeTextChangedListener(mazeEditTextTextWatcher);
+            mazeEditText.getText().delete(startIndex, mazeEditText.length());
+            mazeEditText.addTextChangedListener(mazeEditTextTextWatcher);
+
+            return string;
         }
 
         @Override
@@ -411,10 +494,5 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
         @Override
         public void afterTextChanged(Editable editable) { }
-    }
-
-    private void initializeMaze(int row, int column) {
-
-        maze = new int[row][column];
     }
 }

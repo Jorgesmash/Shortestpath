@@ -64,9 +64,6 @@ public class BaseFragmentActivity extends FragmentActivity {
             long eventTime = System.currentTimeMillis();
             KeyEvent event = new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, primaryCode, 0, 0, 0, 0, KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE);
             dispatchKeyEvent(event);
-            if(primaryCode == KeyEvent.KEYCODE_NUMPAD_EQUALS){
-//                displayCalculatedResult();
-            }
         }
 
         @Override
@@ -83,28 +80,9 @@ public class BaseFragmentActivity extends FragmentActivity {
 
         @Override
         public void swipeUp() { }
-    };
+    }
 
     public void registerEditText(EditText editText) {
-
-        editText.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                CharSequence mS = editable.subSequence(0, editable.length());
-                if (!mS.toString().equals("") || mS.toString() != null) {
-                    if (editable.length() > 0 && mS.toString().contains("=")) {
-                        editable.replace(editable.length() - 1, editable.length(), "");
-                    }
-                }
-            }
-        });
 
         // Make the custom keyboard appear
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {

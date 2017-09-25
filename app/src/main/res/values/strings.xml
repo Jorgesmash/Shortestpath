@@ -5,13 +5,14 @@
     <!-- MainFragmentActivity strings -->
     <string name="insert_number_for_position_label">Insert number for position:</string>
     <string name="maze_size_label">Maze size:  </string>
-    <string name="press_start_button">Press Start button to calculate...</string>
-    <string name="press_add_button_to_continue">Press Add button to continue...</string>
-    <string name="press_add_button_to_start_again">Press Add button to start again...</string>
-    <string name="success">Sucess:      </string>
+    <string name="press_start_button">Press Start button to calculate…</string>
+    <string name="press_add_button_to_continue">Press Add button to continue…</string>
+    <string name="press_add_button_to_start_again">Press Add button to start again…</string>
+    <string name="success">Success: </string>
     <string name="yes">yes</string>
     <string name="distance">Distance:</string>
     <string name="row_secuence">Row secuence:</string>
     <string name="invalid_matrix">Invalid matrix</string>
+    <string name="the_shortest_path">The Shortest Path</string>
 
 </resources>

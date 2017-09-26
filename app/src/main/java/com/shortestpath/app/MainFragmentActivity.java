@@ -19,7 +19,7 @@ import com.shortestpath.app.mazeparser.datamodels.Path;
 public class MainFragmentActivity extends BaseFragmentActivity {
 
     // Maze variables
-    private int[][] maze;
+    private String[][] maze;
     private int rowSize;
     private int columnSize;
 
@@ -106,7 +106,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
      * Also sets an OnShortestPathFoundListener which will be called when the process has finished (successful or not)
      * to calculate the shortest path.
      */
-    private void findShortestPathInMaze(int[][] maze) {
+    private void findShortestPathInMaze(String[][] maze) {
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
         mazeParser.calculate(maze);
@@ -154,7 +154,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
             if (success) {
                 // Set success result as "Yes"
-                successTextView.setText("Yes");
+                successTextView.setText(R.string.yes);
 
                 // Set distance result
                 String distanceString = new Integer(path.getDistance()).toString();
@@ -165,7 +165,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
             } else {
                 // Set success result as "No"
-                successTextView.setText("No");
+                successTextView.setText(R.string.no);
 
                 if (path == null) {
                     // Set a message saying that the given matrix is invalid
@@ -302,7 +302,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                 MainFragmentActivity.this.columnSize = columnSize;
 
                 // Initialize the maze bi-dimensional array
-                maze = new int[rowSize][columnSize];
+                maze = new String[rowSize][columnSize];
             }
         }
     }
@@ -442,11 +442,10 @@ public class MainFragmentActivity extends BaseFragmentActivity {
             }
 
             String numberString = lastRowString.substring(lastCommaIndex + 1, lastRowString.length() - 1);
-            int number;
-            try {
-                number = Integer.parseInt(numberString);
-            } catch (NumberFormatException e) {
 
+            try {
+                int number = Integer.parseInt(numberString);
+            } catch (NumberFormatException e) {
                 if (mazeEditText.length() > 0) {
                     popSubstring(mazeEditText.length() - 1);
                 }
@@ -455,7 +454,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
             }
 
             // Insert the number in the maze bi-dimensional array
-            maze[entersCount][commasCount - 1] = number;
+            maze[entersCount][commasCount - 1] = numberString;
 
             // Update the index of the last comma
             lastCommaIndex = lastRowString.length() - 1;

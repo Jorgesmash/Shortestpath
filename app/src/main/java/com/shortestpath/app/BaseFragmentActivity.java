@@ -30,8 +30,8 @@ public class BaseFragmentActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onStart() {
+        super.onStart();
 
         ViewGroup viewGroup = this.findViewById(android.R.id.content);
         View view = viewGroup.getChildAt(0);
@@ -51,7 +51,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     }
 
-    public class KeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
+    private class KeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
 
         @Override
         public void onPress(int primaryCode) { }

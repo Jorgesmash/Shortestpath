@@ -41,7 +41,7 @@ public class MazeParser {
      * First, the derivative maze is obtained by calling the method parseInputMaze with the original maze as parameter.
      * Second, the smallest path is obtained by calling the method getShortestPath with the derivative maze as parameter.
      * */
-    public void calculate(int[][] initial_maze) {
+    public void calculate(String[][] initial_maze) {
 
         Path path = null;
         int[][] derivative_maze;
@@ -50,7 +50,9 @@ public class MazeParser {
             success = false;
 
         } else {
-            derivative_maze = parseInputMaze(initial_maze);
+
+            int[][] valid_maze = convertMaze(initial_maze);
+            derivative_maze = parseInputMaze(valid_maze);
 
             if (derivative_maze != null) {
                 path = getShortestPath(derivative_maze);
@@ -65,6 +67,56 @@ public class MazeParser {
     }
 
     /**
+     * Validates and converts the given string array in a int array.
+     *
+     * Returns an array of integers when the conditions of each element in the string array to be a digit is valid.
+     * If the given array is not valid, returns null.
+     *
+     * Conditions:
+     * 1. First character is a digit or arithmetic sign '+' or '-'
+     * 2. If the first character is a sign, the length of the string must be bigger than 1
+     * 3. From second char ahead, all must be digits
+     * */
+    private int[][] convertMaze(String[][] initial_maze) {
+
+        int[][] converted_maze = new int[initial_maze.length][initial_maze[0].length];
+
+        for (int i = 0; i < initial_maze.length; i++) {
+            for (int j = 0; j < initial_maze[0].length; j++) {
+
+                // Validate that the element accomplish with:
+                // 1. First character is a digit or arithmetic sign '+' or '-'
+                // 2. If the first character is a sign, the length of the string must be bigger than 1
+                // 3. From second char ahead, all must be digits
+                String elementString = initial_maze[i][j];
+                for (int x = 0; x < elementString.length(); x++) {
+                    char c = elementString.charAt(x);
+
+                    boolean valid;
+
+                    if (x == 0) {
+                        valid = Character.isDigit(c) || (c == '-' || c == '+' && elementString.length() > 1);
+                    } else {
+                        valid = Character.isDigit(c);
+                    }
+
+                    if (!valid) {
+                        return null;
+                    }
+                }
+
+                // So the element is valid. Now let's convert it from string to int and place it in the int array
+                int number = Integer.parseInt(elementString);
+                converted_maze[i][j] = number;
+            }
+        }
+
+        return converted_maze;
+    }
+
+    // So the initial maze is valid. Now let's convert it from string to int array
+
+    /**
      *
      * Calculates a derivative maze with the smallest distance between each node and one of its left-adjacent nodes.
      *
@@ -76,6 +128,10 @@ public class MazeParser {
      * */
     private int[][] parseInputMaze(int[][] initial_maze) {
 
+        if (initial_maze == null) {
+            return null;
+        }
+
         int maxRow = initial_maze.length;
         int maxColumn = initial_maze[0].length;
 
@@ -84,35 +140,27 @@ public class MazeParser {
         for (int col = 0; col < maxColumn; col++) {
             for (int row = 0; row < maxRow; row++) {
 
-                String string = "" + initial_maze[row][col];
-                try {
-                    int integer = Integer.parseInt(string);
-                } catch (NumberFormatException e) {
-                    return null;
-                } finally {
+                if (col == 0) {
+                    derivative_maze[row][col] = initial_maze[row][col];
+                } else {
 
-                    if (col == 0) {
-                        derivative_maze[row][col] = initial_maze[row][col];
+                    int upperNode;
+                    if ((row - 1) < 0) {
+                        upperNode = derivative_maze[maxRow - 1][col - 1];
                     } else {
-
-                        int upperNode;
-                        if ((row - 1) < 0) {
-                            upperNode = derivative_maze[maxRow - 1][col - 1];
-                        } else {
-                            upperNode = derivative_maze[row - 1][col - 1];
-                        }
-
-                        int centerNode = derivative_maze[row][col - 1];
-
-                        int lowerNode;
-                        if ((row + 1) >= maxRow) {
-                            lowerNode = derivative_maze[0][col - 1];
-                        } else {
-                            lowerNode = derivative_maze[row + 1][col - 1];
-                        }
-
-                        derivative_maze[row][col] = initial_maze[row][col] + (Math.min(upperNode, Math.min(centerNode, lowerNode)));
+                        upperNode = derivative_maze[row - 1][col - 1];
                     }
+
+                    int centerNode = derivative_maze[row][col - 1];
+
+                    int lowerNode;
+                    if ((row + 1) >= maxRow) {
+                        lowerNode = derivative_maze[0][col - 1];
+                    } else {
+                        lowerNode = derivative_maze[row + 1][col - 1];
+                    }
+
+                    derivative_maze[row][col] = initial_maze[row][col] + (Math.min(upperNode, Math.min(centerNode, lowerNode)));
                 }
             }
         }

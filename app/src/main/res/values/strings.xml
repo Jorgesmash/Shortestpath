@@ -9,8 +9,9 @@
     <string name="press_add_button_to_continue">Press Add button to continue…</string>
     <string name="press_add_button_to_start_again">Press Add button to start again…</string>
     <string name="success">Success: </string>
-    <string name="yes">yes</string>
-    <string name="distance">Distance:</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cost">Cost:</string>
     <string name="row_secuence">Row secuence:</string>
     <string name="invalid_matrix">Invalid matrix</string>
     <string name="the_shortest_path">The Shortest Path</string>

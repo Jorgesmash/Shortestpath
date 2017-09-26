@@ -50,7 +50,6 @@ public class MazeParser {
             success = false;
 
         } else {
-
             int[][] valid_maze = convertMaze(initial_maze);
             derivative_maze = parseInputMaze(valid_maze);
 
@@ -73,9 +72,9 @@ public class MazeParser {
      * If the given array is not valid, returns null.
      *
      * Conditions:
-     * 1. First character is a digit or arithmetic sign '+' or '-'
-     * 2. If the first character is a sign, the length of the string must be bigger than 1
-     * 3. From second char ahead, all must be digits
+     * 1. First character is a digit or arithmetic sign '+' or '-'.
+     * 2. If the first character is a sign, the length of the string must be bigger than 1.
+     * 3. From second char ahead, all must be digits.
      * */
     private int[][] convertMaze(String[][] initial_maze) {
 
@@ -114,17 +113,13 @@ public class MazeParser {
         return converted_maze;
     }
 
-    // So the initial maze is valid. Now let's convert it from string to int array
-
     /**
-     *
      * Calculates a derivative maze with the smallest distance between each node and one of its left-adjacent nodes.
      *
      * Chooses the smallest of the additions between the number in the node we are reviewing,
      * and the left-adjacent three nodes which we can come from.
      *
      * The smallest addition is stored in a new derivative maze.
-     *
      * */
     private int[][] parseInputMaze(int[][] initial_maze) {
 

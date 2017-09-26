@@ -23,6 +23,9 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private int rowSize;
     private int columnSize;
 
+    // The Maze parser
+    private static MazeParser mazeParser = new MazeParser();
+
     // Widgets
     private TextView shortestPathLabelTextView;
     private TextView successLabelTextView;
@@ -44,10 +47,16 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private TextView mazeSizeTextView;
     private MazeEditTextTextWatcher mazeEditTextTextWatcher;
 
+    public MazeParser getMazeParser() {
+        return mazeParser;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_fragment_activity);
+
+        mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
 
         shortestPathLabelTextView = findViewById(R.id.shortestPathLabelTextView);
 
@@ -107,8 +116,6 @@ public class MainFragmentActivity extends BaseFragmentActivity {
      * to calculate the shortest path.
      */
     private void findShortestPathInMaze(String[][] maze) {
-        MazeParser mazeParser = new MazeParser();
-        mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
         mazeParser.calculate(maze);
     }
 
@@ -157,7 +164,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                 successTextView.setText(R.string.yes);
 
                 // Set distance result
-                String distanceString = new Integer(path.getDistance()).toString();
+                String distanceString = "" + path.getCost();
                 distanceTextView.setText(distanceString);
 
                 // Set sequence result
@@ -173,7 +180,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
                 } else if (path.getNodeList().size() == 0) {
                     // Set distance result
-                    String distanceString = new Integer(path.getDistance()).toString();
+                    String distanceString = "" + path.getCost();
                     rowSequenceTextView.setText(distanceString);
 
                     // Show an empty array
@@ -182,7 +189,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                 } else if (path.getNodeList().size() > 0) {
 
                     // Set distance result
-                    String distanceString = new Integer(path.getDistance()).toString();
+                    String distanceString = "" + path.getCost();
                     rowSequenceTextView.setText(distanceString);
 
                     // Set sequence result
@@ -277,8 +284,8 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                 }
 
                 // Adjust for columnSize
-                if (columnSize < 5) {
-                    columnSize = 5;
+                if (columnSize < 1) {
+                    columnSize = 1;
                 } else if (columnSize > 100) {
                     columnSize = 100;
                 }

@@ -1,9 +1,5 @@
 package com.shortestpath.mazeparser;
 
-import android.content.Context;
-import android.view.View;
-
-import com.shortestpath.R;
 import com.shortestpath.app.mazeparser.MazeParser;
 import com.shortestpath.app.mazeparser.datamodels.Node;
 import com.shortestpath.app.mazeparser.datamodels.Path;
@@ -17,10 +13,10 @@ public class MazeParserUnitTest {
      */
 
     @Test
-    public void testParse1() throws Exception {
+    public void exampleTest1() throws Exception {
 
         String[][] maze = new String[][] {
-                {"3", "4","1", "2", "8", "6"},
+                {"3", "4", "1", "2", "8", "6"},
                 {"6", "1", "8", "2", "7", "4"},
                 {"5", "9", "3", "9", "9", "5"},
                 {"8", "4", "1", "3", "2", "6"},
@@ -33,7 +29,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse2() throws Exception {
+    public void exampleTest2() throws Exception {
 
         String[][] maze = new String[][] {
                 {"3", "4", "1", "2", "8", "6"},
@@ -49,7 +45,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse3() throws Exception {
+    public void exampleTest3() throws Exception {
 
         String[][] maze = new String[][] {
                 {"19", "10", "19", "10", "19"},
@@ -63,7 +59,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse4() throws Exception {
+    public void exampleTest4() throws Exception {
 
         String[][] maze = new String[][] {
                 {"5", "8", "5", "3", "5"},
@@ -75,7 +71,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse5() throws Exception {
+    public void exampleTest5() throws Exception {
 
         String[][] maze = new String[][] {
                 {"5"},
@@ -91,7 +87,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse6() throws Exception {
+    public void exampleTest6() throws Exception {
 
         String[][] maze = new String[][] {
                 {"5", "5", "H"},
@@ -105,7 +101,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse7() throws Exception {
+    public void exampleTest7() throws Exception {
 
         String[][] maze = new String[][] {};
 
@@ -115,7 +111,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse8() throws Exception {
+    public void exampleTest8() throws Exception {
 
         String[][] maze = new String[][] {
                 {"69", "10", "19", "10", "19"},
@@ -129,7 +125,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse9() throws Exception {
+    public void exampleTest9() throws Exception {
 
         String[][] maze = new String[][] {
                 {"60", "3", "3", "6"},
@@ -143,7 +139,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse10() throws Exception {
+    public void exampleTest10() throws Exception {
 
         String[][] maze = new String[][] {
                 {"6", "3", "-5", "9"},
@@ -158,7 +154,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse11() throws Exception {
+    public void exampleTest11() throws Exception {
 
         String[][] maze = new String[][] {
                 {"51", "51"},
@@ -173,7 +169,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse12() throws Exception {
+    public void exampleTest12() throws Exception {
 
         String[][] maze = new String[][] {
                 {"51", "51", "51"},
@@ -188,7 +184,7 @@ public class MazeParserUnitTest {
     }
 
     @Test
-    public void testParse13() throws Exception {
+    public void exampleTest13() throws Exception {
 
         String[][] maze = new String[][] {
                 {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"},
@@ -213,7 +209,7 @@ public class MazeParserUnitTest {
                 System.out.println("Yes");
 
                 // Set distance result
-                String distanceString = new Integer(path.getDistance()).toString();
+                String distanceString = "" + path.getCost();
                 System.out.println(distanceString);
 
                 // Set sequence result
@@ -226,19 +222,18 @@ public class MazeParserUnitTest {
                 if (path == null) {
                     // Set a message saying that the given matrix is invalid
                     System.out.println("Invalid matrix");
-                } else if (path.getNodeList().size() == 0) {
 
+                } else if (path.getNodeList().size() == 0) {
                     // Set distance result
-                    String distanceString = new Integer(path.getDistance()).toString();
+                    String distanceString = "" + path.getCost();
                     System.out.println(distanceString);
 
                     // Set sequence result as an empty array
                     System.out.println("[]");
 
                 } else if (path.getNodeList().size() > 0) {
-
                     // Set distance result
-                    String distanceString = new Integer(path.getDistance()).toString();
+                    String distanceString = "" + path.getCost();
                     System.out.println(distanceString);
 
                     // Set sequence result

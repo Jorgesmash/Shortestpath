@@ -19,10 +19,11 @@ public class Path {
         return nodeList;
     }
 
-    public int getDistance() {
+    public int getCost() {
         if (nodeList.size() == 0) {
             return 0;
         }
+
         Node lastNode = (Node) nodeList.get(nodeList.size() - 1);
         return lastNode.getCost();
     }

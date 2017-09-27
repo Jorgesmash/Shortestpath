@@ -23,7 +23,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private int rowSize;
     private int columnSize;
 
-    // The Maze parser
+    // Creates a new instance of the MazeParser class to findShortestPath the shortest path.
     private static MazeParser mazeParser = new MazeParser();
 
     // Widgets
@@ -47,6 +47,10 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private TextView mazeSizeTextView;
     private MazeEditTextTextWatcher mazeEditTextTextWatcher;
 
+    /**
+     * Getter of the MazeParser instance to expose it for external classes so they can set a listener
+     * to know when the process of calculating the shortest path is finished.
+     */
     public MazeParser getMazeParser() {
         return mazeParser;
     }
@@ -56,6 +60,8 @@ public class MainFragmentActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_fragment_activity);
 
+        // Also sets an OnShortestPathFoundListener which will be called to inform that the
+        // when the shortest path calculatin process has finished.
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
 
         shortestPathLabelTextView = findViewById(R.id.shortestPathLabelTextView);
@@ -111,16 +117,9 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     }
 
     /**
-     * Creates a new instance of the MazeParser class to calculate the shortest path.
-     * Also sets an OnShortestPathFoundListener which will be called when the process has finished (successful or not)
-     * to calculate the shortest path.
-     */
-    private void findShortestPathInMaze(String[][] maze) {
-        mazeParser.calculate(maze);
-    }
-
-    /**
-     * Listens if the MazeParser class has finished to calculate the shortest path
+     * Called when user clicks the Start Floating Button.
+     *
+     * When clicked, the calculation process to find the shortest path is started.
      */
     private class StartFloatingButtonOnClickListener implements View.OnClickListener {
 
@@ -130,12 +129,15 @@ public class MainFragmentActivity extends BaseFragmentActivity {
             // Hide custom keyboard
             MainFragmentActivity.this.hideCustomKeyboard();
 
-            findShortestPathInMaze(maze);
+            // Start the calculation process to find the shortest path
+            mazeParser.findShortestPath(maze);
         }
     }
 
     /**
-     * Listens if the MazeParser class has finished to calculate the shortest path
+     * Listens if the MazeParser class has finished to findShortestPath the shortest path.
+     *
+     * Once the process has finished the results of the calculation are displayed in screen.
      */
     private class MazeParserOnShortestPathFoundListener implements MazeParser.OnShortestPathFoundListener {
 
@@ -225,6 +227,11 @@ public class MainFragmentActivity extends BaseFragmentActivity {
         }
     }
 
+    /**
+     * Called when user presses the Add FloatingButton.
+     *
+     * When clicked, the current status of the widgets is firstly reset to the initial UI configuration
+     * */
     private class AddFloatingButtonOnClickListener implements View.OnClickListener {
 
         @Override
@@ -256,8 +263,13 @@ public class MainFragmentActivity extends BaseFragmentActivity {
         }
     }
 
+    /**
+     * Shows dialog to enter the size of the bi-dimensional maze.
+     *
+     * Creates and shows a InputMazeSizeDialogFragment instance and sets it a OnMazeSizeEnteredListener
+     * which is called once the user finishes to enter the maze size.
+     * */
     private void showInputMazeSizeDialogFragment() {
-
         InputMazeSizeDialogFragment inputMazeSizeDialogFragment = InputMazeSizeDialogFragment.newInstance();
         inputMazeSizeDialogFragment.setOnMazeSizeEnteredListener(new InputDialogFragmentOnMazeSizeEnteredListener());
         inputMazeSizeDialogFragment.show(getFragmentManager(), null);
@@ -315,10 +327,10 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     }
 
     /**
-     * Called every time the representing trama of the maze entered by the user changes.
+     * Called every time the representing string of the maze entered by the user changes.
      *
-     * Each time the trama changes, it looks for commas (',') and negative signs ('-') in order to determine
-     * if the trama sould continue adding numbers in the same row or should it do it in the next one.
+     * Each time the string changes, it looks for commas (',') and negative signs ('-') in order to determine
+     * if the string should continue adding numbers in the same row or should it do it in the next one.
      *
      * When a coma is typed, the last entered number before the comma is appended in the maze
      * bi-dimensional array.

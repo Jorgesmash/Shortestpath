@@ -41,7 +41,7 @@ public class MazeParser {
      * First, the derivative maze is obtained by calling the method parseInputMaze with the original maze as parameter.
      * Second, the smallest path is obtained by calling the method getShortestPath with the derivative maze as parameter.
      * */
-    public void calculate(String[][] initial_maze) {
+    public void findShortestPath(String[][] initial_maze) {
 
         Path path = null;
         int[][] derivative_maze;
@@ -259,9 +259,10 @@ public class MazeParser {
     /**
      * Informs that the calculation as finished.
      *
-     * The result of the calculation might be successful or unsuccessful, if the distance of the smallest path is bigger than 50.
+     * The result of the calculation might be successful or unsuccessful.
+     * If the distance of the smallest path is bigger than 50.
      *
-     * It returns as parameters both the result of the calculation and the shortest path.
+     * It returns both the result of the calculation and the shortest path as parameters.
      * */
     public interface OnShortestPathFoundListener {
         void onShortestPathFound(boolean success, Path path);

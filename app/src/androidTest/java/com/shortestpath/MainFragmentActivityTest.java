@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.not;
 
 
 /**
- * Performs an instrumented test of the application flow along a walkthrough to calculate the
+ * Performs an instrumented test of the application flow to calculate the
  * shortest path of a given maze.
  *
  * The result of the calculation will be printed with ASSERT priority in Logcat.
@@ -299,7 +299,9 @@ public class MainFragmentActivityTest {
         onView(withId(R.id.startFloatingButton)).perform(click());
     }
 
-
+    /**
+     * Creates a string from the input maze that can be interpreted by the MazeParser.
+     */
     private String getTypedString(String[][] maze) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -317,7 +319,7 @@ public class MainFragmentActivityTest {
     }
 
     /**
-     * Listens if the MazeParser class has finished to calculate the shortest path
+     * Listens if the MazeParser class has finished to findShortestPath the shortest path
      */
     private class MazeParserOnShortestPathFoundListener implements MazeParser.OnShortestPathFoundListener {
 

@@ -9,7 +9,7 @@ import org.junit.Test;
 public class MazeParserUnitTest {
 
     /**
-     *  Test cases to calculate a given maze and print the result
+     *  Test cases to find the shortest path of a given maze and print the result
      */
 
     @Test
@@ -25,7 +25,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -150,7 +150,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -180,7 +180,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     @Test
@@ -193,7 +193,7 @@ public class MazeParserUnitTest {
 
         MazeParser mazeParser = new MazeParser();
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
-        mazeParser.calculate(maze);
+        mazeParser.findShortestPath(maze);
     }
 
     /**

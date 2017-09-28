@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.shortestpath.app.MainFragmentActivity;
+import com.shortestpath.app.main.MainFragmentActivity;
 import com.shortestpath.app.mazeparser.MazeParser;
 import com.shortestpath.app.mazeparser.datamodels.Node;
 import com.shortestpath.app.mazeparser.datamodels.Path;

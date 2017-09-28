@@ -41,7 +41,11 @@ public class MainFragmentActivityTest {
     @Before
     public void setUp() throws Exception {
 
+        // Creates a new instance of the MazeParser class to calculate the shortest path.
         MazeParser mazeParser = activityTestRule.getActivity().getMazeParser();
+
+        // Sets an OnShortestPathFoundListener which will be called to inform that the
+        // when the shortest path calculation process has finished.
         mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
     }
 

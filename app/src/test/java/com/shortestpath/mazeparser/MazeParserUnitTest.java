@@ -6,11 +6,10 @@ import com.shortestpath.app.mazeparser.datamodels.Path;
 
 import org.junit.Test;
 
+/**
+ *  Test cases to find the shortest path of a given maze and print the result.
+ */
 public class MazeParserUnitTest {
-
-    /**
-     *  Test cases to find the shortest path of a given maze and print the result
-     */
 
     @Test
     public void exampleTest1() throws Exception {

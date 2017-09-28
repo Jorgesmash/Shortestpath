@@ -23,8 +23,8 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private int rowSize;
     private int columnSize;
 
-    // Creates a new instance of the MazeParser class to findShortestPath the shortest path.
-    private static MazeParser mazeParser = new MazeParser();
+    // The maze parser
+    private MazeParser mazeParser;
 
     // Widgets
     private TextView shortestPathLabelTextView;
@@ -55,14 +55,21 @@ public class MainFragmentActivity extends BaseFragmentActivity {
         return mazeParser;
     }
 
+    /** Constructor */
+    public MainFragmentActivity() {
+
+        // Creates a new instance of the MazeParser class to calculate the shortest path
+        mazeParser = new MazeParser();
+
+        // Sets an OnShortestPathFoundListener which will be called to inform that the
+        // when the shortest path calculation process has finished
+        mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_fragment_activity);
-
-        // Also sets an OnShortestPathFoundListener which will be called to inform that the
-        // when the shortest path calculatin process has finished.
-        mazeParser.setOnShortestPathFoundListener(new MazeParserOnShortestPathFoundListener());
 
         shortestPathLabelTextView = findViewById(R.id.shortestPathLabelTextView);
 

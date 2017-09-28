@@ -405,9 +405,6 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
                         // Add a space after the comma in the number sequence
                         pushSubstring(" ");
-
-                        // Update the current maze insertion position
-                        positionTextView.setText("[" + entersCount + "x" + commasCount + "]");
                     }
 
                 } else { // Else, the new number is part of the next row
@@ -449,6 +446,9 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                         }
                     }
                 }
+
+                // Update the current maze insertion position
+                positionTextView.setText("[" + entersCount + "x" + commasCount + "]");
             }
         }
 

@@ -425,8 +425,7 @@ public class MainFragmentActivity extends FragmentActivity {
                 negative = !negative;
 
                 // Calculate the beginning of the number being currently typed
-                String numberString;
-                numberString = mazeEditText.getText().toString().substring(mazeEditText.getText().toString().lastIndexOf("\n") + 1); // Find the beginning of the last row
+                String numberString = mazeEditText.getText().toString().substring(mazeEditText.getText().toString().lastIndexOf("\n") + 1); // Find the beginning of the last row
                 numberString = numberString.substring(numberString.lastIndexOf(" ") + 1); // In the last row, find the last space character
 
                 if (negative) {
@@ -455,11 +454,10 @@ public class MainFragmentActivity extends FragmentActivity {
 
                     // Take the last entered number and add it in maze
                     boolean numberAdded = appendNumberInMaze();
+                    if (numberAdded) { // If the number was successfully added to the maze
 
-                    // Reset negative sign control variable to false
-                    negative = false;
-
-                    if (numberAdded) {
+                        // Reset negative sign control variable to false
+                        negative = false;
 
                         // Add a space after the comma in the number sequence
                         mazeEditText.append(", ");
@@ -469,11 +467,10 @@ public class MainFragmentActivity extends FragmentActivity {
 
                     // Take the last entered number and add it in maze
                     boolean numberAdded = appendNumberInMaze();
+                    if (numberAdded) { // If the number was successfully added to the maze
 
-                    // Reset negative sign control variable to false
-                    negative = false;
-
-                    if (numberAdded) {
+                        // Reset negative sign control variable to false
+                        negative = false;
 
                         entersCount++;
                         if (entersCount < rowSize) { // Checks if it's still possible to add more rows

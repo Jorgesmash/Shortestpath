@@ -29,12 +29,12 @@ public class PathTest {
     @Test
     public void testGetDistance() throws Exception {
 
-        // Validate that getCost returns size equals 0 when path is empty
-        assertEquals(0, path.getCost());
+        // Validate that getTotalCost returns size equals 0 when path is empty
+        assertEquals(0, path.getTotalCost());
 
-        // Validate that getCost returns size bigger than zero when path contains at least one node
+        // Validate that getTotalCost returns size bigger than zero when path contains at least one node
         Node node1 = new Node();
         path.addNode(node1);
-        assertTrue(path.getCost() >= 0);
+        assertTrue(path.getTotalCost() >= 0);
     }
 }

@@ -6,34 +6,31 @@
     android:verticalGap="1px">
 
     <Row>
-        <Key android:codes="8" android:keyEdgeFlags="left" android:keyLabel="1" />
+        <Key android:codes="8" android:keyLabel="1" />
         <Key android:codes="9" android:keyLabel="2" />
         <Key android:codes="10" android:keyLabel="3" />
-        <Key android:codes="0"  android:keyEdgeFlags="right" android:keyLabel="" />
-        <!--<Key android:codes="67" android:keyEdgeFlags="right" android:keyLabel="\u232b" />-->
+        <Key android:codes="67" android:keyLabel="\u232b" />
     </Row>
 
     <Row>
-        <Key android:codes="11" android:keyEdgeFlags="left" android:keyLabel="4" />
+        <Key android:codes="11" android:keyLabel="4" />
         <Key android:codes="12" android:keyLabel="5" />
         <Key android:codes="13" android:keyLabel="6" />
-        <Key android:codes="69"  android:keyEdgeFlags="right" android:keyLabel="-" />
-        <!--<Key android:codes="0"  android:keyEdgeFlags="right" android:keyLabel="" />-->
+        <Key android:codes="69" android:keyLabel="-" />
     </Row>
 
     <Row>
-        <Key android:codes="14" android:keyEdgeFlags="left" android:keyLabel="7"  />
+        <Key android:codes="14" android:keyLabel="7"  />
         <Key android:codes="15" android:keyLabel="8" />
         <Key android:codes="16" android:keyLabel="9" />
-        <Key android:codes="55" android:keyEdgeFlags="right" android:keyLabel="NEXT" />
+        <Key android:codes="55" android:keyLabel="NEXT" />
     </Row>
 
     <Row>
-        <Key android:codes="0"  android:keyEdgeFlags="right" android:keyLabel="" />
+        <Key android:codes="0" android:keyLabel="" />
         <Key android:codes="7" android:keyLabel="0" />
-        <Key android:codes="0"  android:keyLabel="" />
-        <Key android:codes="0"  android:keyEdgeFlags="right" android:keyLabel="" />
-        <!--<Key android:codes="66"  android:keyEdgeFlags="right" android:keyLabel="\u23ce" />-->
+        <Key android:codes="0" android:keyLabel="" />
+        <Key android:codes="0" android:keyLabel="" />
     </Row>
 
 </Keyboard>

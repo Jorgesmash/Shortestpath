@@ -14,6 +14,10 @@ import android.widget.EditText;
 
 import com.shortestpath.R;
 
+/**
+ * Dialog which takes from user the row and column sizes and send them to the activity through a
+ * listener.
+ * */
 public class InputMazeSizeDialogFragment extends DialogFragment {
 
 
@@ -76,6 +80,12 @@ public class InputMazeSizeDialogFragment extends DialogFragment {
         inputMethodManager.hideSoftInputFromWindow(inputDialogFragment.getWindowToken(), 0);
     }
 
+    /**
+     * Called when user presses the OK button in the Dialog.
+     *
+     * When pressing OK, this method call onMazeSizeEnteredListener with the row and column sizes
+     * as paramters.
+     * */
     private class PositiveButtonOnClickListener implements DialogInterface.OnClickListener {
 
         @Override

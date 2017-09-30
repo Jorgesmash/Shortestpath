@@ -1,5 +1,10 @@
 package com.shortestpath.app.mazeparser.datamodels;
 
+/**
+ * Data model which holds the properties of a node into the maze.
+ *
+ * This properties are its position in the maze, determined by the row and column, and the cost,
+ * which means the weight of the route to calculate the shortest pasth. */
 public class Node {
 
     private int cost;

@@ -208,7 +208,7 @@ public class MazeParserUnitTest {
                 System.out.println("Yes");
 
                 // Set distance result
-                String distanceString = "" + path.getCost();
+                String distanceString = "" + path.getTotalCost();
                 System.out.println(distanceString);
 
                 // Set sequence result
@@ -224,7 +224,7 @@ public class MazeParserUnitTest {
 
                 } else if (path.getNodeList().size() == 0) {
                     // Set distance result
-                    String distanceString = "" + path.getCost();
+                    String distanceString = "" + path.getTotalCost();
                     System.out.println(distanceString);
 
                     // Set sequence result as an empty array
@@ -232,7 +232,7 @@ public class MazeParserUnitTest {
 
                 } else if (path.getNodeList().size() > 0) {
                     // Set distance result
-                    String distanceString = "" + path.getCost();
+                    String distanceString = "" + path.getTotalCost();
                     System.out.println(distanceString);
 
                     // Set sequence result

@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.shortestpath.app.main.MainFragmentActivity;
+import com.shortestpath.app.MainFragmentActivity;
 import com.shortestpath.app.mazeparser.MazeParser;
 import com.shortestpath.app.mazeparser.datamodels.Node;
 import com.shortestpath.app.mazeparser.datamodels.Path;
@@ -335,7 +335,7 @@ public class MainFragmentActivityTest {
                 Log.println(Log.ASSERT, "InstrumentedTest", "Yes");
 
                 // Set distance result
-                String distanceString = "" + path.getCost();
+                String distanceString = "" + path.getTotalCost();
                 Log.println(Log.ASSERT, "InstrumentedTest", distanceString);
 
                 // Set sequence result
@@ -351,7 +351,7 @@ public class MainFragmentActivityTest {
 
                 } else if (path.getNodeList().size() == 0) {
                     // Set distance result
-                    String distanceString = "" + path.getCost();
+                    String distanceString = "" + path.getTotalCost();
                     Log.println(Log.ASSERT, "InstrumentedTest", distanceString);
 
                     // Set sequence result as an empty array
@@ -359,7 +359,7 @@ public class MainFragmentActivityTest {
 
                 } else if (path.getNodeList().size() > 0) {
                     // Set distance result
-                    String distanceString = "" + path.getCost();
+                    String distanceString = "" + path.getTotalCost();
                     Log.println(Log.ASSERT, "InstrumentedTest", distanceString);
 
                     // Set sequence result

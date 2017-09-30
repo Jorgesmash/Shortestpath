@@ -14,11 +14,11 @@ public class NodeTest {
     @Test
     public void testGetCost() throws Exception {
 
-        // Validate that getCost returns cost = 0 when a cost has not been set
+        // Validate that getTotalCost returns cost = 0 when a cost has not been set
         Node node1 = new Node();
         assertEquals(0, node1.getCost());
 
-        // Validate that getCost returns the same set value
+        // Validate that getTotalCost returns the same set value
         int cost = 12;
         Node node2 = new Node();
         node2.setCost(cost);
@@ -42,11 +42,11 @@ public class NodeTest {
     @Test
     public void testGetCol() throws Exception {
 
-        // Validate that getCost returns col = 0 when a col has not been set
+        // Validate that getTotalCost returns col = 0 when a col has not been set
         Node node1 = new Node();
         assertEquals(0, node1.getCol());
 
-        // Validate that getCost returns the same set value
+        // Validate that getTotalCost returns the same set value
         int col = 12;
         Node node2 = new Node();
         node2.setCol(col);

@@ -367,11 +367,11 @@ public class MainFragmentActivity extends FragmentActivity {
     private class MazeEdiTextOnKeyListener implements View.OnKeyListener {
 
         // Negative sign control variable
-        boolean negative = false;
+        private boolean negative = false;
 
         // Rows and Columns Control variables
-        int commasCount = 0;
-        int entersCount = 0;
+        private int commasCount = 0;
+        private int entersCount = 0;
 
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
@@ -387,7 +387,7 @@ public class MainFragmentActivity extends FragmentActivity {
 
                         // Set the sign of the current number
                         int lastNumber = Integer.parseInt(getLastNumberInMaze());
-                        negative = lastNumber < 0 ? true : false;
+                        negative = lastNumber < 0;
 
                         // Update the current maze insertion position
                         positionTextView.setText("[" + entersCount + ", " + commasCount + "]");
@@ -402,7 +402,7 @@ public class MainFragmentActivity extends FragmentActivity {
 
                         // Set the sign of the current number
                         int lastNumber = Integer.parseInt(getLastNumberInMaze());
-                        negative = lastNumber < 0 ? true : false;
+                        negative = lastNumber < 0;
 
                         // Update the current maze insertion position
                         positionTextView.setText("[" + entersCount + ", " + commasCount + "]");
@@ -453,8 +453,8 @@ public class MainFragmentActivity extends FragmentActivity {
                 if (commasCount < columnSize) { // Checks if the new number is still part of the current row
 
                     // Take the last entered number and add it in maze
-                    boolean numberAdded = appendNumberInMaze();
-                    if (numberAdded) { // If the number was successfully added to the maze
+                    boolean elementAdded = appendElementInMaze();
+                    if (elementAdded) { // If the number was successfully added to the maze
 
                         // Reset negative sign control variable to false
                         negative = false;
@@ -466,8 +466,8 @@ public class MainFragmentActivity extends FragmentActivity {
                 } else { // Else, the new number is part of the next row
 
                     // Take the last entered number and add it in maze
-                    boolean numberAdded = appendNumberInMaze();
-                    if (numberAdded) { // If the number was successfully added to the maze
+                    boolean elementAdded = appendElementInMaze();
+                    if (elementAdded) { // If the number was successfully added to the maze
 
                         // Reset negative sign control variable to false
                         negative = false;
@@ -509,29 +509,32 @@ public class MainFragmentActivity extends FragmentActivity {
         }
 
         /**
-         * Appends the last number of a sequence in the maze.
+         * Appends the last typed element of the sequence in the maze.
          *
-         * The position of the number in the maze will be calculated by the following:
+         * The position of the element in the maze will be calculated by the following:
          * 1. The row index is determined by the count of new line characters ('\n') in the sequence string.
          * 2. The column index is determined by the count of commas (',') from the last new line to the end of the sequence string.
          * */
-        private boolean appendNumberInMaze() {
+        private boolean appendElementInMaze() {
 
-            String numberString = getLastNumberInMaze();
-
-            try {
-                int number = Integer.parseInt(numberString);
-            } catch (NumberFormatException e) {
+            String elementString = getLastNumberInMaze();
+            if (elementString.equals(",") || elementString.equals("-") || elementString.equals("")) {
                 commasCount--;
                 return false;
             }
 
             // Insert the number in the maze bi-dimensional array
-            maze[entersCount][commasCount - 1] = numberString;
+            maze[entersCount][commasCount - 1] = elementString;
 
             return true;
         }
 
+        /**
+         * Returns the last typed number by the user.
+         *
+         * The location of the number in the maze is defined by the last position of a
+         * ' ' or a '\n' character, until the end of the string.
+         * */
         private String getLastNumberInMaze() {
 
             String lastNumber;

@@ -24,7 +24,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
-
 /**
  * Performs an instrumented test of the application flow to calculate the
  * shortest path of a given maze.
@@ -163,12 +162,8 @@ public class MainFragmentActivityTest {
         onView(withId(R.id.rowsEditText)).perform(typeText("" + maze.length));
         onView(withId(R.id.columnsEditText)).perform(typeText("" + (maze.length == 0 ? 0 : maze[0].length)));
         onView(withText("OK")).perform(click());
-
-        // As an invalid matriz is entered, mazeEditText may show a bad representation of the data
         onView(withId(R.id.mazeEditText)).perform(typeText(typedString));
-
-        // As an invalid matriz is entered, check if startFloatingButton is disabled
-        onView(withId(R.id.startFloatingButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.startFloatingButton)).perform(click());
     }
 
     @Test
@@ -369,13 +364,14 @@ public class MainFragmentActivityTest {
         }
 
         private void setSequenceResult(Path path) {
+
             // Set sequence result
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("[");
+
             for (int i = 0; i < path.getNodeList().size(); i++) {
 
                 Node node = (Node) path.getNodeList().get(i);
-
                 stringBuilder.append(node.getRow() + 1);
 
                 if (i < path.getNodeList().size() - 1) {
@@ -384,6 +380,7 @@ public class MainFragmentActivityTest {
                     stringBuilder.append("]");
                 }
             }
+
             Log.println(Log.ASSERT, "InstrumentedTest", stringBuilder.toString());
         }
     }

@@ -20,7 +20,6 @@ import com.shortestpath.R;
  * */
 public class InputMazeSizeDialogFragment extends DialogFragment {
 
-
     // Widgets
     private View inputDialogFragment;
 

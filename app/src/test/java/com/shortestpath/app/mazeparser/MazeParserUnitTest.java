@@ -1,6 +1,5 @@
-package com.shortestpath.mazeparser;
+package com.shortestpath.app.mazeparser;
 
-import com.shortestpath.app.mazeparser.MazeParser;
 import com.shortestpath.app.mazeparser.datamodels.Node;
 import com.shortestpath.app.mazeparser.datamodels.Path;
 

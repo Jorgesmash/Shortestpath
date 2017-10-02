@@ -1,7 +1,4 @@
-package com.shortestpath.mazeparser.datamodels;
-
-import com.shortestpath.app.mazeparser.datamodels.Node;
-import com.shortestpath.app.mazeparser.datamodels.Path;
+package com.shortestpath.app.mazeparser.datamodels;
 
 import org.junit.Before;
 import org.junit.Test;

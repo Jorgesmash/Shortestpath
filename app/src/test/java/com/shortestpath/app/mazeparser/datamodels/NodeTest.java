@@ -1,10 +1,5 @@
-package com.shortestpath.mazeparser.datamodels;
+package com.shortestpath.app.mazeparser.datamodels;
 
-import com.shortestpath.app.mazeparser.datamodels.Node;
-
-import junit.framework.Assert.*;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

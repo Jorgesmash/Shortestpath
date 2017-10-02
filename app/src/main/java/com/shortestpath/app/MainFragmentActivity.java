@@ -598,7 +598,7 @@ public class MainFragmentActivity extends FragmentActivity {
     private void showInputMazeSizeDialogFragment() {
         InputMazeSizeDialogFragment inputMazeSizeDialogFragment = InputMazeSizeDialogFragment.newInstance();
         inputMazeSizeDialogFragment.setOnMazeSizeEnteredListener(new InputDialogFragmentOnMazeSizeEnteredListener());
-        inputMazeSizeDialogFragment.show(getFragmentManager(), null);
+        inputMazeSizeDialogFragment.show(getFragmentManager(), "inputMazeSizeDialogFragment");
     }
 
     @Override

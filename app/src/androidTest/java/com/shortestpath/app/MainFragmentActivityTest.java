@@ -194,19 +194,19 @@ public class MainFragmentActivityTest {
     /**
      * Performs the instrumented test with a given maze.
      * */
-    private void performInstrumentedTest(String[][] maze) {
+    private void performInstrumentedTest(String[][] mazeArray) {
 
         // Opens a dialog where the size of the maze is typed
         onView(withId(R.id.addFloatingButton)).perform(click());
-        onView(withId(R.id.rowsEditText)).perform(typeText("" + maze.length));
-        onView(withId(R.id.columnsEditText)).perform(typeText("" + (maze.length == 0 ? 0 : maze[0].length)));
+        onView(withId(R.id.rowsEditText)).perform(typeText("" + mazeArray.length));
+        onView(withId(R.id.columnsEditText)).perform(typeText("" + (mazeArray.length == 0 ? 0 : mazeArray[0].length)));
         onView(withText("OK")).perform(click());
 
         // If the typed size of the maze is bigger than zero, check mazeEditText is enabled
         EditText mazeEditText = activityTestRule.getActivity().findViewById(R.id.mazeEditText);
         if (mazeEditText.isEnabled()) {
             // If mazeEditText is enabled, type the data of the maze and click startFloatingButton to calculate
-            onView(withId(R.id.mazeEditText)).perform(typeText(getTypedString(maze)));
+            onView(withId(R.id.mazeEditText)).perform(typeText(getTypedString(mazeArray)));
             onView(withId(R.id.startFloatingButton)).perform(click());
 
             // After calculating, check that the activity is showing the results, as well as

@@ -15,7 +15,7 @@
             android:layout_height="48dp"
             android:layout_marginLeft="10dp"
             android:hint="Number of rows"
-            android:inputType="numberDecimal"
+            android:inputType="numberSigned"
             android:padding="8dp"
             android:layout_weight="1"/>
 
@@ -25,7 +25,7 @@
             android:layout_height="48dp"
             android:layout_marginRight="10dp"
             android:hint="Number of columns"
-            android:inputType="numberDecimal"
+            android:inputType="numberSigned"
             android:padding="8dp"
             android:layout_weight="1"/>
 

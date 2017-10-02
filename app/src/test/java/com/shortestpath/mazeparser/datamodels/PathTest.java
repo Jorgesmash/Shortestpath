@@ -19,15 +19,15 @@ public class PathTest {
         path = new Path();
     }
 
-    @Test
+    @Test // Tests the method Path.getNodeList()
     public void testGetNodeList() throws Exception {
 
         // Validate that the returned List (list of nodes) is never null
         assertNotNull(path.getNodeList());
     }
 
-    @Test
-    public void testGetDistance() throws Exception {
+    @Test // Tests the method Path.getTotalCost()
+    public void testGetTotalCost() throws Exception {
 
         // Validate that getTotalCost returns size equals 0 when path is empty
         assertEquals(0, path.getTotalCost());

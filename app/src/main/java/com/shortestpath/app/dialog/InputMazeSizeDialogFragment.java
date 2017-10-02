@@ -91,23 +91,39 @@ public class InputMazeSizeDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
 
-            int rowSize = 0;
-            int columnSize = 0;
-
+            // Hide Keyboard
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(inputDialogFragment.getWindowToken(), 0);
 
-            String rowString = rowsEditText.getText().toString();
-            String columnString = columnsEditText.getText().toString();
+            // Get the string with the number of rows and columns
+            String rowsString = rowsEditText.getText().toString();
+            String columnsString = columnsEditText.getText().toString();
+
+            int rows = 0;
+            int columns = 0;
 
             try {
-                rowSize = Integer.parseInt(rowString);
-                columnSize = Integer.parseInt(columnString);
+                rows = Integer.parseInt(rowsString);
+                columns = Integer.parseInt(columnsString);
             } catch (NumberFormatException e) {
                 Log.e("InputMazeDialogFragment", e.toString());
             }
 
-            onMazeSizeEnteredListener.onMazeSizeEntered(rowSize, columnSize);
+            // Adjust rows to constrained range
+            if (rows < 0) {
+                rows = 0;
+            } else if (rows > 10) {
+                rows = 10;
+            }
+
+            // Adjust columns to constrained range
+            if (columns < 0) {
+                columns = 0;
+            } else if (columns > 100) {
+                columns = 100;
+            }
+
+            onMazeSizeEnteredListener.onMazeSizeEntered(rows, columns);
         }
     }
 }

@@ -11,7 +11,7 @@ import static junit.framework.Assert.assertEquals;
 
 public class NodeTest {
 
-    @Test
+    @Test // Tests the method Node.getCost()
     public void testGetCost() throws Exception {
 
         // Validate that getTotalCost returns cost = 0 when a cost has not been set
@@ -25,7 +25,7 @@ public class NodeTest {
         assertEquals(cost, node2.getCost());
     }
 
-    @Test
+    @Test // Tests the method Node.getRow()
     public void testGetRow() throws Exception {
 
         // Validate that getRow returns 0 when no rows have been set
@@ -39,7 +39,7 @@ public class NodeTest {
         assertEquals(row, node2.getRow());
     }
 
-    @Test
+    @Test // Tests the method Node.getCol()
     public void testGetCol() throws Exception {
 
         // Validate that getTotalCost returns col = 0 when a col has not been set

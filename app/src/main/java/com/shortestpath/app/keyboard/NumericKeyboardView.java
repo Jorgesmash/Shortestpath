@@ -23,6 +23,8 @@ import android.view.inputmethod.InputMethodManager;
  * */
 public class NumericKeyboardView extends KeyboardView {
 
+    // Set this variable to true in order to avoid a shown error in a layout which is implementing
+    // this custom keyboard during layout edition
     private static boolean inEditMode = false;
 
     /** Constructors */
@@ -38,12 +40,18 @@ public class NumericKeyboardView extends KeyboardView {
         super(new KeyboardContextWrapperFix(context, inEditMode), attrs, defStyleAttr, defStyleRes);
     }
 
+    /**
+     * Hides the custom keyboard.
+     * */
     public void hideCustomKeyboard() {
         setVisibility(View.GONE);
         setEnabled(false);
     }
 
-    public void showCustomKeyboard(View view) {
+    /**
+     * Show the custom keyboard
+     * */
+    public void showKeyboard(View view) {
         setVisibility(View.VISIBLE);
         setEnabled(true);
 

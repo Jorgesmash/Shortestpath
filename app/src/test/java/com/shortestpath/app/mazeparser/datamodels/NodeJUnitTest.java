@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class NodeTest {
+public class NodeJUnitTest {
 
     @Test // Tests the method Node.getCost()
     public void testGetCost() throws Exception {

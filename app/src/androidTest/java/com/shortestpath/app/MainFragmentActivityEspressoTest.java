@@ -15,7 +15,9 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -28,7 +30,7 @@ import static org.hamcrest.Matchers.not;
  * */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class MainFragmentActivityTest {
+public class MainFragmentActivityEspressoTest {
 
     @Rule
     public ActivityTestRule<MainFragmentActivity> activityTestRule = new ActivityTestRule<>(MainFragmentActivity.class);
@@ -201,6 +203,7 @@ public class MainFragmentActivityTest {
         onView(withId(R.id.rowsEditText)).perform(typeText("" + mazeArray.length));
         onView(withId(R.id.columnsEditText)).perform(typeText("" + (mazeArray.length == 0 ? 0 : mazeArray[0].length)));
         onView(withText("OK")).perform(click());
+        onView(withText("OK")).check(doesNotExist());
 
         // If the typed size of the maze is bigger than zero, check mazeEditText is enabled
         EditText mazeEditText = activityTestRule.getActivity().findViewById(R.id.mazeEditText);
@@ -210,7 +213,7 @@ public class MainFragmentActivityTest {
             onView(withId(R.id.startFloatingButton)).perform(click());
 
             // After calculating, check that the activity is showing the results, as well as
-            // startFloatingButton is now disabled and addFloatingButton is now enabled
+            // startFloatingButton is again disabled and addFloatingButton is again enabled
             onView(withId(R.id.shortestPathLabelTextView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
             onView(withId(R.id.succesLabelTextView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
             onView(withId(R.id.successTextView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));

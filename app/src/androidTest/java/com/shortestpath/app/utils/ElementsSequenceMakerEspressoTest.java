@@ -1,4 +1,4 @@
-package com.shortestpath.app;
+package com.shortestpath.app.utils;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.EditText;
 
 import com.shortestpath.R;
+import com.shortestpath.app.MainFragmentActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,20 +16,20 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.shortestpath.app.testutils.TestUtilsActions.requestFocus;
-import static com.shortestpath.app.testutils.TestUtilsActions.setEnabled;
-import static com.shortestpath.app.testutils.TestUtilsActions.setFocusableInTouchMode;
+import static com.shortestpath.app.testutils.TestUtilsActionsEspresso.requestFocus;
+import static com.shortestpath.app.testutils.TestUtilsActionsEspresso.setEnabled;
+import static com.shortestpath.app.testutils.TestUtilsActionsEspresso.setFocusableInTouchMode;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Checks if the associated View.OnKeyListener to mazeEditText is able to convert the input element
- * sequence in an output sequence which looks aesthetically good in the mazeEditText.
+ * Checks if ElementSequenceMaker is able to convert the user's typed input element sequence
+ * into an output sequence which looks aesthetically good in the mazeEditText.
  *
- * MainFragmentActivity.MazeEditTextOnKeyListener
+ * ElementsSequenceMaker.consumeKeyCode
  * */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class MazeEditTextOnKeyListenerTest {
+public class ElementsSequenceMakerEspressoTest {
 
     @Rule
     public ActivityTestRule<MainFragmentActivity> activityTestRule = new ActivityTestRule<>(MainFragmentActivity.class);
@@ -45,7 +46,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("3, 4, 1, 2, 8, 6\n6, 1, 8, 2, 7, 4\n5, 9, 3, 9, 9, 5\n8, 4, 1, 3, 2, 6\n3, 7, 2, 8, 6, 4", outputString);
@@ -63,7 +64,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("3, 4, 1, 2, 8, 6\n6, 1, 8, 2, 7, 4\n5, 9, 3, 9, 9, 5\n8, 4, 1, 3, 2, 6\n3, 7, 2, 1, 2, 3", outputString);
@@ -79,7 +80,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("19, 10, 19, 10, 19\n21, 23, 20, 19, 12\n20, 12, 20, 11, 10", outputString);
@@ -93,7 +94,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("5, 8, 5, 3, 5", outputString);
@@ -111,7 +112,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("5\n8\n5\n3\n5", outputString);
@@ -127,7 +128,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("5, 5, H\n8, M, 7\n5, 7, 5", outputString);
@@ -139,7 +140,7 @@ public class MazeEditTextOnKeyListenerTest {
         String[][] mazeArray = new String[][] {};
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("", outputString);
@@ -155,7 +156,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("69, 10, 19, 10, 19\n51, 23, 20, 19, 12\n60, 12, 20, 11, 10", outputString);
@@ -171,7 +172,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("60, 3, 3, 6\n6, 3, 7, 9\n5, 6, 8, 3", outputString);
@@ -188,7 +189,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("6, 3, -5, 9\n-5, 2, 4, 10\n3, -2, 6, 10\n6, -1, -2, 10", outputString);
@@ -205,7 +206,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("51, 51\n0, 51\n51, 51\n5, 5", outputString);
@@ -222,7 +223,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("51, 51, 51\n0, 51, 51\n51, 51, 51\n5, 5, 51", outputString);
@@ -237,7 +238,7 @@ public class MazeEditTextOnKeyListenerTest {
         };
 
         String inputString = getTypedString(mazeArray);
-        String outputString = testOnKeyListener(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
+        String outputString = testConsumeKeyCode(inputString, mazeArray.length, mazeArray.length == 0 ? 0 : mazeArray[0].length);
 
         // Check if outputString is equals to the expected result
         assertEquals("1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1\n2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2", outputString);
@@ -259,13 +260,12 @@ public class MazeEditTextOnKeyListenerTest {
 
     /**
      * Performs the instrumented test with a given maze to test the associated View.OnKeyListener
-     * to mazeEditText
+     * to mazeEditText.
      * */
-    private String testOnKeyListener(String inputString, int rowSize, int columnSize) {
+    private String testConsumeKeyCode(String inputString, int rowSize, int columnSize) {
 
         // Set the maze rows and columns size
-        activityTestRule.getActivity().setRowSize(rowSize);
-        activityTestRule.getActivity().setColumnSize(columnSize);
+        activityTestRule.getActivity().setMazeSize(rowSize, columnSize);
 
         // Perform the typing of the inputString in mazeEditText
         onView(withId(R.id.mazeEditText)).perform(typeText(inputString));

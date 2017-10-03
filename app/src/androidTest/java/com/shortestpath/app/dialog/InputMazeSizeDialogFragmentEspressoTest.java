@@ -31,7 +31,7 @@ import static junit.framework.Assert.assertEquals;
  * */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class InputMazeSizeDialogFragmentTest {
+public class InputMazeSizeDialogFragmentEspressoTest {
 
     private int rowSize;
     private int columnSize;
@@ -118,7 +118,7 @@ public class InputMazeSizeDialogFragmentTest {
      * Performs an instrumented test with the given rows and columns size.
      * */
     private void performInstrumentedTest(String rowsString, String columnsString) {
-        // Type the rows and columns values in the EditTexts of the inputMazeSizeDialogFragment
+        // Type the rows and columns values in the EditTexts of the inputMazeSizeDialogFragment and press the OK button
         onView(withId(R.id.rowsEditText)).perform(typeText(rowsString));
         onView(withId(R.id.columnsEditText)).perform(typeText(columnsString));
         onView(withText("OK")).perform(click());
@@ -135,8 +135,8 @@ public class InputMazeSizeDialogFragmentTest {
         @Override
         public void onMazeSizeEntered(int rowSize, int columnSize) {
             // Set the values of both row and column sizes in the class fields
-            InputMazeSizeDialogFragmentTest.this.rowSize = rowSize;
-            InputMazeSizeDialogFragmentTest.this.columnSize = columnSize;
+            InputMazeSizeDialogFragmentEspressoTest.this.rowSize = rowSize;
+            InputMazeSizeDialogFragmentEspressoTest.this.columnSize = columnSize;
         }
     }
 }

@@ -17,6 +17,7 @@ import com.shortestpath.app.keyboard.NumericKeyboardView;
 import com.shortestpath.app.mazeparser.MazeParser;
 import com.shortestpath.app.mazeparser.datamodels.Node;
 import com.shortestpath.app.mazeparser.datamodels.Path;
+import com.shortestpath.app.utils.ElementsSequenceMaker;
 
 /**
  * The presentation activity of the app.
@@ -25,9 +26,12 @@ import com.shortestpath.app.mazeparser.datamodels.Path;
  * */
 public class MainFragmentActivity extends FragmentActivity {
 
-    // Maze variables
-    private int rowSize;
-    private int columnSize;
+    // Maze size variables
+    private int rowSize = 0;
+    private int columnSize = 0;
+
+    // The class which builds up the sequence of maze elements with the user's input
+    private ElementsSequenceMaker elementsSequenceMaker;
 
     // The maze parser which calculates the shortest path
     private MazeParser mazeParser;
@@ -69,22 +73,26 @@ public class MainFragmentActivity extends FragmentActivity {
     /** Getters and setters */
 
     /**
-     * Setter for rowSize.
+     * Setter for Maze Size.
      *
-     * This setter is useful for unit testing purposes.
+     * Sets the number of rows and columns to determine the size of the maze.
+     *
+     * Once a maze size is given, a new instance of ElementsSequenceMaker is created.
      * */
-    public void setRowSize(int rowSize) {
+    public void setMazeSize(int rowSize, int columnSize) {
         this.rowSize = rowSize;
+        this.columnSize = columnSize;
+
+        CharSequence cs = mazeEditText.getText();
+        elementsSequenceMaker = new ElementsSequenceMaker(mazeEditText, rowSize, columnSize);
+        elementsSequenceMaker.setOnSequencePositionChangedListener(new ElementsSequenceMakerOnSequencePositionChangedListener());
     }
 
-    /**
-     * Setter for columnSize.
-     *
-     * This setter is useful for unit testing purposes.
-     * */
-    public void setColumnSize(int columnSize) {
-        this.columnSize = columnSize;
+    public ElementsSequenceMaker getElementsSequenceMaker() {
+        return elementsSequenceMaker;
     }
+
+    /** Activity Lifecycle */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +150,13 @@ public class MainFragmentActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
 
@@ -151,24 +166,26 @@ public class MainFragmentActivity extends FragmentActivity {
     }
 
     /**
-     * Called when user clicks the Start Floating Button.
-     *
-     * When clicked, the calculation process to find the shortest path is started.
-     */
-    private class StartFloatingButtonOnClickListener implements View.OnClickListener {
+     * Called any time a new element was added or deleted from the sequence of element.
+     * */
+    private class ElementsSequenceMakerOnSequencePositionChangedListener implements ElementsSequenceMaker.OnSequencePositionChangedListener {
 
         @Override
-        public void onClick(View view) {
+        public void onSequencePositionChanged(int newRow, int newColumn) {
 
-            // Hide custom keyboard
-            numericKeyboardView.hideCustomKeyboard();
+            if (newRow < rowSize || newColumn < columnSize) { // If there are still elements to be inserted
 
-            // Create the mazeArray from the typedString
-            String typedString = mazeEditText.getText().toString();
-            String[][] mazeArray = createMazeArray(typedString);
+                // Show the new position where the next element will be inserted
+                positionTextView.setText("[" + newRow + ", " + newColumn + "]");
 
-            // Start the calculation process to find the shortest path
-            mazeParser.findShortestPath(mazeArray);
+            } else { // If there are no more elements to be inserted
+
+                // Update the status of the widgets
+                hintTextView.setText(getString(R.string.press_start_button));
+                positionTextView.setVisibility(View.INVISIBLE);
+                mazeEditText.setEnabled(false);
+                startFloatingButton.setEnabled(true);
+            }
         }
     }
 
@@ -295,6 +312,28 @@ public class MainFragmentActivity extends FragmentActivity {
     }
 
     /**
+     * Called when user clicks the Start Floating Button.
+     *
+     * When clicked, the calculation process to find the shortest path is started.
+     */
+    private class StartFloatingButtonOnClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+
+            // Hide custom keyboard
+            numericKeyboardView.hideCustomKeyboard();
+
+            // Create the mazeArray from the typedString
+            String typedString = mazeEditText.getText().toString();
+            String[][] mazeArray = createMazeArray(typedString);
+
+            // Start the calculation process to find the shortest path
+            mazeParser.findShortestPath(mazeArray);
+        }
+    }
+
+    /**
      * Called when user presses the Add FloatingButton.
      *
      * When clicked, the current status of the widgets is firstly reset to the initial UI configuration
@@ -306,28 +345,35 @@ public class MainFragmentActivity extends FragmentActivity {
 
             // Reset all the widgets to initial values
             shortestPathLabelTextView.setVisibility(View.VISIBLE);
-
             successLabelTextView.setVisibility(View.GONE);
             successTextView.setVisibility(View.GONE);
             distanceLabelTextView.setVisibility(View.GONE);
             distanceTextView.setVisibility(View.GONE);
             rowSequenceLabelTextView.setVisibility(View.GONE);
             rowSequenceTextView.setVisibility(View.GONE);
-
             hintTextView.setText(getString(R.string.press_add_button_to_continue));
-
             positionTextView.setText("[0, 0]");
             positionTextView.setVisibility(View.INVISIBLE);
-
             mazeEditText.setText("");
-
             mazeSizeLabelTextView.setVisibility(View.INVISIBLE);
             mazeSizeTextView.setVisibility(View.INVISIBLE);
-
             startFloatingButton.setVisibility(View.INVISIBLE);
 
+            // Show InputMazeSizeDialogFragment to enter the size of a new maze
             showInputMazeSizeDialogFragment();
         }
+    }
+
+    /**
+     * Shows dialog to enter the size of the bi-dimensional maze.
+     *
+     * Creates and shows a InputMazeSizeDialogFragment instance and sets it a OnMazeSizeEnteredListener
+     * which is called once the user finishes to enter the maze size.
+     * */
+    private void showInputMazeSizeDialogFragment() {
+        InputMazeSizeDialogFragment inputMazeSizeDialogFragment = InputMazeSizeDialogFragment.newInstance();
+        inputMazeSizeDialogFragment.setOnMazeSizeEnteredListener(new InputMazeSizeDialogFragmentOnMazeSizeEnteredListener());
+        inputMazeSizeDialogFragment.show(getFragmentManager(), "inputMazeSizeDialogFragment");
     }
 
     /**
@@ -336,7 +382,7 @@ public class MainFragmentActivity extends FragmentActivity {
      * If rowSize < 1, it will be adjusted to 1. If rowSize > 10, it will be adjusted to 10
      * If columnSize < 5, it will be adjusted to 5. if columnSize > 100, it will be adjusted to 100
      * */
-    private class InputDialogFragmentOnMazeSizeEnteredListener implements InputMazeSizeDialogFragment.OnMazeSizeEnteredListener {
+    private class InputMazeSizeDialogFragmentOnMazeSizeEnteredListener implements InputMazeSizeDialogFragment.OnMazeSizeEnteredListener {
 
         @Override
         public void onMazeSizeEntered(int rowSize, int columnSize) {
@@ -356,207 +402,27 @@ public class MainFragmentActivity extends FragmentActivity {
                 mazeSizeTextView.setText(rowSize + "x" + columnSize);
                 mazeSizeTextView.setVisibility(View.VISIBLE);
 
-                // Keep the size of the rows and columns in class variable level
-                MainFragmentActivity.this.rowSize = rowSize;
-                MainFragmentActivity.this.columnSize = columnSize;
+                // Keep the size of the maze in class field
+                MainFragmentActivity.this.setMazeSize(rowSize, columnSize);
             }
         }
     }
 
     /**
      * Called every time a new element is entered in mazeEditText by the user.
-     *
-     * Each time the string changes, it looks for commas (','), negative signs ('-') and
-     * empty characters ('') in order to determine if the string should continue adding numbers in
-     * the same row or should it do it in the next one.
-     *
-     * Each time a comma is typed, a space character (' ') is appended in the elements sequence, or
-     * a new line character is appended when the maximum number of elements for a row has been reached.
-     *
-     * When a minus sign is typed, the number to be typed after the sign will be negative.
-     *
-     * Once the total number of rows is reached, the maze is ready to calculate its shortest path.
      * */
     private class MazeEditTextOnKeyListener implements View.OnKeyListener {
-
-        // Negative sign control variable
-        private boolean negative = false;
-
-        // Rows and Columns Control variables
-        private int commasCount = 0;
-        private int entersCount = 0;
 
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
 
-            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            boolean consumed = false;
 
-                if (mazeEditText.length() > 0) {
-
-                    char lastChar = mazeEditText.getText().charAt(mazeEditText.length() - 1);
-                    if (lastChar == ' ') {
-                        mazeEditText.getText().delete(mazeEditText.getText().toString().lastIndexOf(","), mazeEditText.length());
-                        commasCount--;
-
-                        // Set the sign of the current number
-                        int lastNumber = Integer.parseInt(getLastTypedElement());
-                        negative = lastNumber < 0;
-
-                        // Update the current maze insertion position
-                        positionTextView.setText("[" + entersCount + ", " + commasCount + "]");
-
-                        // The KeyEvent is consumed
-                        return true;
-
-                    } else if (lastChar == '\n') {
-                        mazeEditText.getText().delete(mazeEditText.getText().toString().lastIndexOf("\n"), mazeEditText.length());
-                        entersCount--;
-                        commasCount = columnSize - 1;
-
-                        // Set the sign of the current number
-                        int lastNumber = Integer.parseInt(getLastTypedElement());
-                        negative = lastNumber < 0;
-
-                        // Update the current maze insertion position
-                        positionTextView.setText("[" + entersCount + ", " + commasCount + "]");
-
-                        // The KeyEvent is consumed
-                        return true;
-
-                    } else if (lastChar == '-') {
-
-                        negative = false;
-
-                        // The KeyEvent is not consumed
-                        return false;
-                    }
-                }
-
-            } else if (keyCode == KeyEvent.KEYCODE_MINUS && keyEvent.getAction() == KeyEvent.ACTION_DOWN) { // If the typed character is a minus sign and it was not already typed
-
-                // Invert the sign of the number being currently typed
-                negative = !negative;
-
-                // Calculate the beginning of the number being currently typed
-                String numberString = mazeEditText.getText().toString().substring(mazeEditText.getText().toString().lastIndexOf("\n") + 1); // Find the beginning of the last row
-                numberString = numberString.substring(numberString.lastIndexOf(" ") + 1); // In the last row, find the last space character
-
-                if (negative) {
-                    // If the negative flag is positive, make the number negative
-                    numberString = "-" + numberString;
-                } else {
-                    // Else, remove the negative sign of the number to make it positive
-                    numberString = numberString.substring(numberString.lastIndexOf(" ") == -1 ? 1 : numberString.lastIndexOf(" ") + 2);
-                }
-
-                // Remove the number and right away add it with its new sign
-                if (mazeEditText.getText().toString().lastIndexOf(" ") > mazeEditText.getText().toString().lastIndexOf("\n")) {
-                    mazeEditText.getText().delete(mazeEditText.getText().toString().lastIndexOf(" ") + 1, mazeEditText.length());
-                } else {
-                    mazeEditText.getText().delete(mazeEditText.getText().toString().lastIndexOf("\n") + 1, mazeEditText.length());
-                }
-                mazeEditText.append(numberString);
-
-                // The KeyEvent is consumed
-                return true;
-
-            } else if (keyCode == KeyEvent.KEYCODE_COMMA && keyEvent.getAction() == KeyEvent.ACTION_DOWN) { // If the typed character is a comma
-
-                commasCount++;
-                if (commasCount < columnSize) { // Checks if the new number is still part of the current row
-
-                    // Take the last entered element and add it in mazeEditText
-                    boolean elementAdded = validElement();
-                    if (elementAdded) { // If the number was successfully added in mazeEditText
-
-                        // Reset negative sign control variable to false
-                        negative = false;
-
-                        // Add a space after the comma in the elements sequence
-                        mazeEditText.append(", ");
-                    }
-
-                } else { // Else, the new element is part of the next row
-
-                    // Take the last entered element and add it in mazeEditText
-                    boolean elementAdded = validElement();
-                    if (elementAdded) { // If the element was successfully added in mazeEditText
-
-                        // Reset negative sign control variable to false
-                        negative = false;
-
-                        entersCount++;
-                        if (entersCount < rowSize) { // Checks if it's still possible to add more rows
-
-                            // Add an enter at the end of the elements sequence
-                            mazeEditText.append("\n");
-
-                            // Reset variables for row control
-                            commasCount = 0;
-
-                        } else { // Else, mazeEditText is filled
-
-                            // Reset variables for both row and column control
-                            commasCount = 0;
-                            entersCount = 0;
-
-                            // Update the status of the widgets
-                            hintTextView.setText(getString(R.string.press_start_button));
-                            positionTextView.setVisibility(View.INVISIBLE);
-                            mazeEditText.setEnabled(false);
-                            startFloatingButton.setEnabled(true);
-                        }
-                    }
-                }
-
-                // Update the current insertion position
-                positionTextView.setText("[" + entersCount + ", " + commasCount + "]");
-
-                // The KeyEvent is consumed
-                return true;
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                consumed = elementsSequenceMaker.consumeKeyCode(keyCode);
             }
 
-            // The KeyEvent is not consumed
-            return false;
-        }
-
-        /**
-         * Validates the last typed element in the elements sequence.
-         *
-         * The element is invalid if it is any of the control characters like: comma (,), a minus (-) or an empty char().
-         *
-         * If the element is invalid, it is ignored, so it is necessary to discount one comma in
-         * order to release the position and allow a next element to use it.
-         * */
-        private boolean validElement() {
-
-            String elementString = getLastTypedElement();
-            if (elementString.equals(",") || elementString.equals("-") || elementString.equals("")) {
-                commasCount--;
-                return false;
-            }
-
-            return true;
-        }
-
-        /**
-         * Returns the last typed number by the user.
-         *
-         * The location of the number in the elements sequence is defined by the last position of a
-         * ' ' or a '\n' character, until the end of the string.
-         * */
-        private String getLastTypedElement() {
-
-            String lastNumber;
-
-            if (mazeEditText.getText().toString().lastIndexOf(' ') > mazeEditText.getText().toString().lastIndexOf('\n')) {
-                lastNumber = mazeEditText.getText().toString().substring(mazeEditText.getText().toString().lastIndexOf(' ') + 1);
-
-            } else {
-                lastNumber = mazeEditText.getText().toString().substring(mazeEditText.getText().toString().lastIndexOf('\n') + 1);
-            }
-
-            return lastNumber;
+            return consumed;
         }
     }
 
@@ -587,18 +453,6 @@ public class MainFragmentActivity extends FragmentActivity {
         public void onClick(View view) {
             numericKeyboardView.showKeyboard(view);
         }
-    }
-
-    /**
-     * Shows dialog to enter the size of the bi-dimensional maze.
-     *
-     * Creates and shows a InputMazeSizeDialogFragment instance and sets it a OnMazeSizeEnteredListener
-     * which is called once the user finishes to enter the maze size.
-     * */
-    private void showInputMazeSizeDialogFragment() {
-        InputMazeSizeDialogFragment inputMazeSizeDialogFragment = InputMazeSizeDialogFragment.newInstance();
-        inputMazeSizeDialogFragment.setOnMazeSizeEnteredListener(new InputDialogFragmentOnMazeSizeEnteredListener());
-        inputMazeSizeDialogFragment.show(getFragmentManager(), "inputMazeSizeDialogFragment");
     }
 
     @Override

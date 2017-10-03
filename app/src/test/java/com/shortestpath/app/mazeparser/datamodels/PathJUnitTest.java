@@ -7,7 +7,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
-public class PathTest {
+public class PathJUnitTest {
 
     private Path path;
 

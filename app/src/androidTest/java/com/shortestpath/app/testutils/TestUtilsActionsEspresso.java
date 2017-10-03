@@ -12,7 +12,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
  * Utility set of convenient custom actions to modified the state of the views during instrumented
  * tests.
  */
-public class TestUtilsActions {
+public class TestUtilsActionsEspresso {
 
     /**
      * ViewAction to modify the enable/disable state of any view.

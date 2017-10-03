@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  *  Test cases to find the shortest path of a given maze and print the result.
  */
-public class MazeParserUnitTest {
+public class MazeParserJUnitTest {
 
     @Test
     public void exampleTest1() throws Exception {
